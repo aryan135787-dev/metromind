@@ -4,169 +4,189 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MetroMind</title>
+<meta name="theme-color" content="#1769e8">
+<title>MetroMind — Your Journey, Your Time</title>
 <style>
+:root{--blue:#1769e8;--navy:#14243d;--muted:#64748b;--bg:#f4f7fc;--card:#fff;--line:#e4eaf3;--red:#b42318}
 *{box-sizing:border-box}
-body{margin:0;background:#f5f8ff;color:#14243d;font-family:Arial,sans-serif}
-header{background:white;padding:18px 6%;font-size:23px;font-weight:bold}
-.logo{background:#1769e8;color:white;padding:9px 12px;border-radius:10px;margin-right:8px}
-main{max-width:800px;margin:auto;padding:30px 6%}
-h1{font-size:30px}
-.muted{color:#718096;line-height:1.5}
-.panel{background:white;border:1px solid #e0e7f1;border-radius:17px;padding:20px;margin-top:20px}
-label{display:block;font-weight:bold;margin:14px 0 7px}
-input{width:100%;padding:14px;border:1px solid #dce4ef;border-radius:10px;font-size:16px}
-button{background:#1769e8;color:white;border:0;border-radius:11px;padding:14px;font-size:16px;font-weight:bold;cursor:pointer}
-.primary{width:100%;margin-top:18px}
-#result{display:none;background:#eaf2ff;padding:18px;border-radius:14px;margin-top:18px;line-height:1.7;overflow-wrap:anywhere}
-.stop{padding:10px;border-left:3px solid #1769e8;margin:8px 0 8px 7px}
-footer{text-align:center;color:#8491a4;padding:30px;font-size:13px}
+body{margin:0;background:var(--bg);color:var(--navy);font-family:system-ui,Arial,sans-serif}
+header{background:#fff;border-bottom:1px solid var(--line);padding:15px 5%;display:flex;align-items:center;gap:11px}
+.logo{width:38px;height:38px;border-radius:12px;background:var(--blue);color:white;display:grid;place-items:center;font-weight:900;font-size:21px}
+.brand{font-size:21px;font-weight:800}
+.brand small{display:block;font-size:10px;letter-spacing:1.4px;color:var(--muted)}
+main{max-width:900px;margin:30px auto;padding:0 18px 40px}
+.eyebrow{color:var(--blue);font-size:12px;font-weight:800;letter-spacing:1.5px}
+h1{font-size:clamp(27px,5vw,40px);margin:7px 0}
+.sub{color:var(--muted);line-height:1.55}
+.card{background:white;border:1px solid var(--line);border-radius:20px;padding:22px;margin:17px 0}
+label{display:block;font-size:13px;font-weight:750;margin:14px 0 7px}
+input{width:100%;padding:15px;border:1px solid #d6deea;border-radius:12px;font-size:16px}
+.actions{display:flex;gap:10px;margin-top:16px}
+button{border:0;border-radius:12px;padding:14px 17px;font-size:15px;font-weight:750;cursor:pointer}
+.primary{background:var(--blue);color:white;flex:1}
+.secondary{background:#edf3ff;color:var(--blue)}
+.status{font-size:13px;color:var(--muted);margin-top:14px}
+.pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#eaf2ff;color:#1757b8;font-size:12px;font-weight:800}
+.error{color:var(--red);background:#fff1f0;padding:12px;border-radius:10px}
+.metrics{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}
+.metric{background:#f3f6fb;border-radius:12px;padding:10px 13px;font-size:13px}
+.metric b{display:block;font-size:17px}
+.leg{border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0}
+.leg-title{font-weight:800;margin-bottom:7px}
+.station{display:flex;gap:12px;align-items:flex-start;padding:9px 0}
+.dot{width:12px;height:12px;border:3px solid var(--blue);background:white;border-radius:50%;margin:4px 0 0 2px;flex:none}
+.station.transfer .dot{border-color:#d97706}
+.station small{display:block;color:var(--muted);margin-top:3px}
+.notice{font-size:12px;line-height:1.55;color:#6b7280;background:#f8fafc;border-radius:12px;padding:13px;margin-top:16px}
+footer{max-width:900px;margin:auto;padding:0 18px 32px;color:var(--muted);font-size:12px;line-height:1.6}
+.hidden{display:none}
+@media(max-width:520px){main{margin:22px auto}.card{padding:17px}.actions{flex-direction:column}.actions button{width:100%}}
 </style>
 </head>
 <body>
-<header><span class="logo">M</span>MetroMind</header>
+<header>
+<div class="logo">M</div>
+<div class="brand">MetroMind<small>YOUR JOURNEY. YOUR TIME. YOUR PEACE OF MIND.</small></div>
+</header>
 <main>
-<p style="color:#1769e8;font-weight:bold">YOUR JOURNEY. YOUR TIME. YOUR PEACE OF MIND.</p>
-<h1>Plan your journey</h1>
-<p class="muted">Find a route between Delhi Metro stations.</p>
-
-<div class="panel">
+<section>
+<div class="eyebrow">DELHI METRO ROUTE PLANNER</div>
+<h1>Where are you going?</h1>
+<p class="sub">Choose your starting station and destination. MetroMind will find a connected route using the station data currently available.</p>
+</section>
+<section class="card">
 <label for="from">Starting station</label>
-<input id="from" list="stations" placeholder="Enter starting station">
-
-<label for="to">Destination station</label>
-<input id="to" list="stations" placeholder="Enter destination station">
-
-<datalist id="stations"></datalist>
-<button class="primary" onclick="calculateRoute()">Calculate route →</button>
-<div id="result"></div>
+<input id="from" list="station-list" placeholder="e.g. Rajiv Chowk" autocomplete="off">
+<label for="to">Destination</label>
+<input id="to" list="station-list" placeholder="e.g. Kashmere Gate" autocomplete="off">
+<datalist id="station-list"></datalist>
+<div class="actions">
+<button class="primary" id="find">Find my route →</button>
+<button class="secondary" id="swap">Swap</button>
 </div>
-
-<p class="muted" id="status">Loading Delhi Metro station data...</p>
-<p class="muted">Data attribution: Transport Stack (Delhi Transport Stack) and Delhi Metro Rail Corporation (DMRC). Static dataset only; its service calendar ends 31 December 2025. Verify current operations with DMRC before travelling.</p>
+<div class="status" id="status" role="status">Loading station data…</div>
+</section>
+<section class="card hidden" id="output" aria-live="polite"></section>
+<section class="notice">
+<b>Important data notice:</b> This prototype uses a static Delhi Metro dataset attributed to Transport Stack and DMRC. Its supplied service calendar ends on 31 December 2025. This is not live service information. Train timings, delays, platforms, fares and real-time location are not provided. Confirm current services with official DMRC information before travelling.
+</section>
 </main>
-<footer>MetroMind © 2026</footer>
-
+<footer>MetroMind is an independent journey-planning prototype and is not an official DMRC app. Data attribution: Transport Stack / Delhi Metro Rail Corporation (DMRC).</footer>
 <script>
-let metroData=null;
-const result=document.getElementById("result");
-const statusText=document.getElementById("status");
-
-async function loadData(){
- try{
-  const response=await fetch("./metro-data.json");
-  if(!response.ok) throw new Error("Could not load data file");
-  metroData=await response.json();
-
-  const datalist=document.getElementById("stations");
-  Object.values(metroData.stops).forEach(stop=>{
-   const option=document.createElement("option");
-   option.value=stop.name;
-   datalist.appendChild(option);
-  });
-
-  statusText.textContent="Delhi Metro station data loaded: "+
-    Object.keys(metroData.stops).length+" stations.";
- }catch(error){
-  statusText.textContent="Unable to load station data. Check that metro-data.json is in the repository.";
- }
+"use strict";
+let DATA=null;
+const $=id=>document.getElementById(id);
+const stationEntries=()=>Object.entries(DATA.stops);
+function lineName(routeId){
+const r=DATA.routes[String(routeId)];
+if(!r)return "Unknown line";
+return (r.name||"").split("_")[0].trim()||"Unknown line";
 }
-
-function findStationId(name){
- const target=name.trim().toLowerCase();
- return Object.keys(metroData.stops).find(id=>
-  metroData.stops[id].name.trim().toLowerCase()===target
- );
+function uniqueLines(ids){return [...new Set((ids||[]).map(lineName))]}
+function showError(message){
+const out=$("output");out.classList.remove("hidden");out.innerHTML="";
+const p=document.createElement("p");p.className="error";p.textContent=message;out.appendChild(p);
 }
-
-function calculateRoute(){
- result.style.display="block";
-
- if(!metroData){
-  result.textContent="Station data is still loading. Please try again.";
-  return;
- }
-
- const start=findStationId(document.getElementById("from").value);
- const end=findStationId(document.getElementById("to").value);
-
- if(!start||!end){
-  result.textContent="Please select valid stations from the suggestions.";
-  return;
- }
- if(start===end){
-  result.textContent="Please select two different stations.";
-  return;
- }
-
- const queue=[{id:start,path:[start],lines:[]}];
- const visited=new Set([start]);
- let found=null;
-
- while(queue.length){
-  const current=queue.shift();
-  if(current.id===end){
-   found=current;
-   break;
-  }
-
-  const neighbours=metroData.graph[current.id]||{};
-  for(const nextId of Object.keys(neighbours)){
-   if(!visited.has(nextId)){
-    visited.add(nextId);
-    const routeIds=neighbours[nextId]||[];
-    const routeId=routeIds[0];
-    const route=metroData.routes[routeId];
-    const line=route ? route.name.split("_")[0] : "Metro";
-
-    queue.push({
-     id:nextId,
-     path:[...current.path,nextId],
-     lines:[...current.lines,line]
-    });
-   }
-  }
- }
-
- if(!found){
-  result.textContent="No connected route found between these stations in the supplied dataset.";
-  return;
- }
-
- const names=found.path.map(id=>metroData.stops[id].name);
- const uniqueLines=[...new Set(found.lines)];
-
- result.innerHTML="";
- const heading=document.createElement("h2");
- heading.textContent="Route found!";
- result.appendChild(heading);
-
- const summary=document.createElement("p");
- summary.textContent="From: "+names[0]+" | To: "+names[names.length-1]+
-  " | Stops: "+(names.length-1);
- result.appendChild(summary);
-
- const lineInfo=document.createElement("p");
- lineInfo.textContent="Route data line labels: "+uniqueLines.join(", ");
- result.appendChild(lineInfo);
-
- const subheading=document.createElement("h3");
- subheading.textContent="Journey sequence";
- result.appendChild(subheading);
-
- names.forEach((name,index)=>{
-  const item=document.createElement("div");
-  item.className="stop";
-  item.textContent=(index+1)+". "+name;
-  result.appendChild(item);
- });
-
- const note=document.createElement("p");
- note.textContent="This is a route calculated from static GTFS data. It does not provide live train timings, platform guidance, or real-time service status.";
- result.appendChild(note);
+async function load(){
+try{
+const response=await fetch("./metro-data.json",{cache:"no-store"});
+if(!response.ok)throw new Error("HTTP "+response.status);
+const d=await response.json();
+if(!d.stops||!d.graph||!d.routes)throw new Error("Unexpected data structure");
+DATA=d;
+const names=stationEntries().map(([,s])=>s.name).filter(Boolean).sort((a,b)=>a.localeCompare(b));
+const frag=document.createDocumentFragment();
+names.forEach(name=>{const opt=document.createElement("option");opt.value=name;frag.appendChild(opt)});
+$("station-list").appendChild(frag);
+$("status").textContent=`Ready · ${names.length} stations loaded`;
+}catch(err){
+$("status").textContent="Could not load metro-data.json. Check that it is beside index.html in the repository.";
 }
-
-loadData();
+}
+function stationIdByName(name){
+const target=name.trim().toLocaleLowerCase();
+return stationEntries().find(([,s])=>(s.name||"").trim().toLocaleLowerCase()===target)?.[0]||null;
+}
+function findBestPath(start,end){
+const queue=[{stop:start,line:null,transfers:0,hops:0,legs:[]}];
+const best=new Map();
+while(queue.length){
+queue.sort((a,b)=>a.transfers-b.transfers||a.hops-b.hops);
+const cur=queue.shift();
+const state=cur.stop+"|"+(cur.line||"");
+const score=[cur.transfers,cur.hops],old=best.get(state);
+if(old&&(old[0]<score[0]||(old[0]===score[0]&&old[1]<=score[1])))continue;
+best.set(state,score);
+if(cur.stop===end)return cur;
+const edges=DATA.graph[cur.stop]||{};
+for(const [next,routeIds] of Object.entries(edges)){
+for(const line of uniqueLines(routeIds)){
+const transfer=cur.line!==null&&cur.line!==line?1:0;
+const t=cur.transfers+transfer,h=cur.hops+1;
+const prior=best.get(next+"|"+line);
+if(prior&&(prior[0]<t||(prior[0]===t&&prior[1]<=h)))continue;
+const legs=cur.legs.map(x=>({...x,stops:[...x.stops]}));
+if(legs.length&&legs[legs.length-1].line===line)legs[legs.length-1].stops.push(next);
+else legs.push({line,stops:[cur.stop,next]});
+queue.push({stop:next,line,transfers:t,hops:h,legs});
+}
+}
+}
+return null;
+}
+function add(parent,tag,text,cls){
+const el=document.createElement(tag);el.textContent=text;if(cls)el.className=cls;parent.appendChild(el);return el;
+}
+function renderRoute(route,start,end){
+const out=$("output");out.innerHTML="";out.classList.remove("hidden");
+add(out,"span","YOUR ROUTE","pill");
+add(out,"h2","Journey found");
+const metrics=document.createElement("div");metrics.className="metrics";out.appendChild(metrics);
+function metric(label,value){
+const box=document.createElement("div");box.className="metric";
+add(box,"b",String(value));add(box,"span",label);metrics.appendChild(box);
+}
+metric("Station stops",route.hops+1);
+metric("Line changes",route.transfers);
+metric("Lines used",route.legs.length);
+add(out,"h3","Journey instructions");
+route.legs.forEach((leg,index)=>{
+const box=document.createElement("div");box.className="leg";out.appendChild(box);
+add(box,"div",`LEG ${index+1} · ${leg.line} LINE`,"leg-title");
+if(index>0)add(box,"p",`Change to the ${leg.line} line at ${DATA.stops[leg.stops[0]].name}.`,"status");
+leg.stops.forEach((sid,j)=>{
+const row=document.createElement("div");
+row.className="station"+((j===0&&index>0)?" transfer":"");
+box.appendChild(row);
+const dot=document.createElement("span");dot.className="dot";row.appendChild(dot);
+const details=document.createElement("div");
+details.appendChild(document.createTextNode(DATA.stops[sid].name));
+const small=document.createElement("small");
+small.textContent=(index===0&&j===0)?"Start here":(sid===end?"Your destination":(j===0&&index>0?"Interchange station":"Continue"));
+details.appendChild(small);row.appendChild(details);
+});
+});
+add(out,"p",`Start: ${DATA.stops[start].name} · Destination: ${DATA.stops[end].name}`,"status");
+const note=document.createElement("div");note.className="notice";
+note.textContent="This route is inferred from static station connections. Check current official station signage for line and interchange details. No live timetable or platform data is available.";
+out.appendChild(note);
+}
+function calculate(){
+if(!DATA){showError("Station data has not loaded. Refresh the page and try again.");return}
+const start=stationIdByName($("from").value),end=stationIdByName($("to").value);
+if(!start||!end){showError("Choose both stations from the suggestions.");return}
+if(start===end){showError("Choose two different stations.");return}
+const route=findBestPath(start,end);
+if(!route){showError("No connected route was found in this dataset.");return}
+renderRoute(route,start,end);
+}
+$("find").addEventListener("click",calculate);
+$("swap").addEventListener("click",()=>{
+const a=$("from").value;$("from").value=$("to").value;$("to").value=a;
+});
+$("to").addEventListener("keydown",e=>{if(e.key==="Enter")calculate()});
+$("from").addEventListener("keydown",e=>{if(e.key==="Enter")$("to").focus()});
+load();
 </script>
 </body>
 </html>
