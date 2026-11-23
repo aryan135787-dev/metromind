@@ -18,7 +18,7 @@ label{display:block;font-weight:bold;margin:14px 0 7px}
 input{width:100%;padding:14px;border:1px solid #dce4ef;border-radius:10px;font-size:16px}
 button{background:#1769e8;color:white;border:0;border-radius:11px;padding:14px;font-size:16px;font-weight:bold;cursor:pointer}
 .primary{width:100%;margin-top:18px}
-#result{display:none;background:#eaf2ff;padding:18px;border-radius:14px;margin-top:18px;line-height:1.7}
+#result{display:none;background:#eaf2ff;padding:18px;border-radius:14px;margin-top:18px;line-height:1.7;overflow-wrap:anywhere}
 .stop{padding:10px;border-left:3px solid #1769e8;margin:8px 0 8px 7px}
 footer{text-align:center;color:#8491a4;padding:30px;font-size:13px}
 </style>
@@ -28,87 +28,145 @@ footer{text-align:center;color:#8491a4;padding:30px;font-size:13px}
 <main>
 <p style="color:#1769e8;font-weight:bold">YOUR JOURNEY. YOUR TIME. YOUR PEACE OF MIND.</p>
 <h1>Plan your journey</h1>
-<p class="muted">Find a route between stations.</p>
+<p class="muted">Find a route between Delhi Metro stations.</p>
 
 <div class="panel">
 <label for="from">Starting station</label>
 <input id="from" list="stations" placeholder="Enter starting station">
+
 <label for="to">Destination station</label>
 <input id="to" list="stations" placeholder="Enter destination station">
-<datalist id="stations">
-<option>Rajiv Chowk</option>
-<option>New Delhi</option>
-<option>Chandni Chowk</option>
-<option>Chawri Bazar</option>
-<option>Kashmere Gate</option>
-<option>Central Secretariat</option>
-<option>Patel Chowk</option>
-<option>Udyog Bhawan</option>
-<option>AIIMS</option>
-<option>Hauz Khas</option>
-</datalist>
+
+<datalist id="stations"></datalist>
 <button class="primary" onclick="calculateRoute()">Calculate route →</button>
 <div id="result"></div>
 </div>
 
-<p class="muted">Prototype notice: This is an illustrative sample network, not an official or complete Delhi Metro route planner. Confirm actual routes with DMRC before travelling.</p>
+<p class="muted" id="status">Loading Delhi Metro station data...</p>
+<p class="muted">Data attribution: Transport Stack (Delhi Transport Stack) and Delhi Metro Rail Corporation (DMRC). Static dataset only; its service calendar ends 31 December 2025. Verify current operations with DMRC before travelling.</p>
 </main>
 <footer>MetroMind © 2026</footer>
 
 <script>
-const network={
-"Rajiv Chowk":["New Delhi","Patel Chowk"],
-"New Delhi":["Rajiv Chowk","Chandni Chowk"],
-"Chandni Chowk":["New Delhi","Chawri Bazar"],
-"Chawri Bazar":["Chandni Chowk","Kashmere Gate"],
-"Kashmere Gate":["Chawri Bazar"],
-"Patel Chowk":["Rajiv Chowk","Central Secretariat"],
-"Central Secretariat":["Patel Chowk","Udyog Bhawan","AIIMS"],
-"Udyog Bhawan":["Central Secretariat"],
-"AIIMS":["Central Secretariat","Hauz Khas"],
-"Hauz Khas":["AIIMS"]
-};
+let metroData=null;
+const result=document.getElementById("result");
+const statusText=document.getElementById("status");
+
+async function loadData(){
+ try{
+  const response=await fetch("./metro-data.json");
+  if(!response.ok) throw new Error("Could not load data file");
+  metroData=await response.json();
+
+  const datalist=document.getElementById("stations");
+  Object.values(metroData.stops).forEach(stop=>{
+   const option=document.createElement("option");
+   option.value=stop.name;
+   datalist.appendChild(option);
+  });
+
+  statusText.textContent="Delhi Metro station data loaded: "+
+    Object.keys(metroData.stops).length+" stations.";
+ }catch(error){
+  statusText.textContent="Unable to load station data. Check that metro-data.json is in the repository.";
+ }
+}
+
+function findStationId(name){
+ const target=name.trim().toLowerCase();
+ return Object.keys(metroData.stops).find(id=>
+  metroData.stops[id].name.trim().toLowerCase()===target
+ );
+}
 
 function calculateRoute(){
- const start=document.getElementById("from").value.trim();
- const end=document.getElementById("to").value.trim();
- const result=document.getElementById("result");
  result.style.display="block";
 
- if(!network[start]||!network[end]){
- result.textContent="Please select stations from the available demo station list.";
- return;
+ if(!metroData){
+  result.textContent="Station data is still loading. Please try again.";
+  return;
+ }
+
+ const start=findStationId(document.getElementById("from").value);
+ const end=findStationId(document.getElementById("to").value);
+
+ if(!start||!end){
+  result.textContent="Please select valid stations from the suggestions.";
+  return;
  }
  if(start===end){
- result.textContent="Please select two different stations.";
- return;
+  result.textContent="Please select two different stations.";
+  return;
  }
 
- const queue=[[start]],visited=new Set([start]);
- let route=null;
+ const queue=[{id:start,path:[start],lines:[]}];
+ const visited=new Set([start]);
+ let found=null;
 
  while(queue.length){
- const path=queue.shift();
- const current=path[path.length-1];
- if(current===end){route=path;break;}
- for(const next of network[current]){
- if(!visited.has(next)){
- visited.add(next);
- queue.push([...path,next]);
- }
- }
+  const current=queue.shift();
+  if(current.id===end){
+   found=current;
+   break;
+  }
+
+  const neighbours=metroData.graph[current.id]||{};
+  for(const nextId of Object.keys(neighbours)){
+   if(!visited.has(nextId)){
+    visited.add(nextId);
+    const routeIds=neighbours[nextId]||[];
+    const routeId=routeIds[0];
+    const route=metroData.routes[routeId];
+    const line=route ? route.name.split("_")[0] : "Metro";
+
+    queue.push({
+     id:nextId,
+     path:[...current.path,nextId],
+     lines:[...current.lines,line]
+    });
+   }
+  }
  }
 
- if(!route){
- result.textContent="No connected route found in this sample network.";
- return;
+ if(!found){
+  result.textContent="No connected route found between these stations in the supplied dataset.";
+  return;
  }
 
- result.innerHTML="<h2>Route found!</h2><p><b>From:</b> "+escapeText(start)+"</p><p><b>To:</b> "+escapeText(end)+"</p><p><b>Stops:</b> "+(route.length-1)+"</p><h3>Journey sequence</h3>"+route.map((s,i)=>"<div class='stop'>"+(i+1)+". "+escapeText(s)+"</div>").join("")+"<p><b>Note:</b> Sample route only. No official line, interchange or timing verification.</p>";
+ const names=found.path.map(id=>metroData.stops[id].name);
+ const uniqueLines=[...new Set(found.lines)];
+
+ result.innerHTML="";
+ const heading=document.createElement("h2");
+ heading.textContent="Route found!";
+ result.appendChild(heading);
+
+ const summary=document.createElement("p");
+ summary.textContent="From: "+names[0]+" | To: "+names[names.length-1]+
+  " | Stops: "+(names.length-1);
+ result.appendChild(summary);
+
+ const lineInfo=document.createElement("p");
+ lineInfo.textContent="Route data line labels: "+uniqueLines.join(", ");
+ result.appendChild(lineInfo);
+
+ const subheading=document.createElement("h3");
+ subheading.textContent="Journey sequence";
+ result.appendChild(subheading);
+
+ names.forEach((name,index)=>{
+  const item=document.createElement("div");
+  item.className="stop";
+  item.textContent=(index+1)+". "+name;
+  result.appendChild(item);
+ });
+
+ const note=document.createElement("p");
+ note.textContent="This is a route calculated from static GTFS data. It does not provide live train timings, platform guidance, or real-time service status.";
+ result.appendChild(note);
 }
-function escapeText(s){
- return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
+
+loadData();
 </script>
 </body>
 </html>
