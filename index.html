@@ -3,108 +3,110 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f5f8ff">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MetroMind</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f5f8ff;color:#14243d;font-family:Arial,sans-serif}
-header{padding:18px 6%;background:white;display:flex;justify-content:space-between;align-items:center}
-.brand{font-size:23px;font-weight:800}
-.logo{background:#1769e8;color:white;padding:9px 12px;border-radius:11px;margin-right:8px}
-main{max-width:900px;margin:auto;padding:30px 6%}
-h1{font-size:32px;margin-bottom:8px}
-.muted{color:#718096}
-.panel{background:white;border:1px solid #e0e7f1;border-radius:18px;padding:18px;margin-top:22px}
-label{display:block;font-weight:700;margin:12px 0 7px}
-input{width:100%;padding:14px;border:1px solid #dce4ef;border-radius:11px;font-size:16px}
-button{border:0;border-radius:11px;padding:14px;background:#1769e8;color:white;font-size:16px;font-weight:700;cursor:pointer}
+header{background:white;padding:18px 6%;font-size:23px;font-weight:bold}
+.logo{background:#1769e8;color:white;padding:9px 12px;border-radius:10px;margin-right:8px}
+main{max-width:800px;margin:auto;padding:30px 6%}
+h1{font-size:30px}
+.muted{color:#718096;line-height:1.5}
+.panel{background:white;border:1px solid #e0e7f1;border-radius:17px;padding:20px;margin-top:20px}
+label{display:block;font-weight:bold;margin:14px 0 7px}
+input{width:100%;padding:14px;border:1px solid #dce4ef;border-radius:10px;font-size:16px}
+button{background:#1769e8;color:white;border:0;border-radius:11px;padding:14px;font-size:16px;font-weight:bold;cursor:pointer}
 .primary{width:100%;margin-top:18px}
-.suggestions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.suggestions button{background:#edf4ff;color:#1769e8;padding:9px 12px;font-size:13px}
-#result{display:none;margin-top:18px;background:#eaf2ff;border-radius:15px;padding:18px}
-.station-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:14px}
-.station{background:white;border:1px solid #e3eaf3;border-radius:13px;padding:14px}
-.map{height:180px;background:#e5effb;border-radius:16px;margin-top:15px;display:flex;align-items:center;justify-content:center;color:#1769e8;font-weight:700}
+#result{display:none;background:#eaf2ff;padding:18px;border-radius:14px;margin-top:18px;line-height:1.7}
+.stop{padding:10px;border-left:3px solid #1769e8;margin:8px 0 8px 7px}
 footer{text-align:center;color:#8491a4;padding:30px;font-size:13px}
 </style>
 </head>
 <body>
-<header>
-<div class="brand"><span class="logo">M</span>MetroMind</div>
-<span>🚇</span>
-</header>
+<header><span class="logo">M</span>MetroMind</header>
 <main>
 <p style="color:#1769e8;font-weight:bold">YOUR JOURNEY. YOUR TIME. YOUR PEACE OF MIND.</p>
 <h1>Plan your journey</h1>
-<p class="muted">Find your Delhi Metro stations and plan your trip.</p>
+<p class="muted">Find a route between stations.</p>
 
 <div class="panel">
 <label for="from">Starting station</label>
 <input id="from" list="stations" placeholder="Enter starting station">
 <label for="to">Destination station</label>
 <input id="to" list="stations" placeholder="Enter destination station">
-
 <datalist id="stations">
-<option value="Rajiv Chowk">
-<option value="Kashmere Gate">
-<option value="New Delhi">
-<option value="Chandni Chowk">
-<option value="Central Secretariat">
-<option value="Dwarka">
-<option value="Dwarka Sector 21">
-<option value="Hauz Khas">
-<option value="Botanical Garden">
-<option value="Noida Sector 18">
-<option value="Lajpat Nagar">
-<option value="AIIMS">
-<option value="Karol Bagh">
-<option value="Mandi House">
-<option value="Yamuna Bank">
-<option value="Janakpuri West">
-<option value="Kalkaji Mandir">
-<option value="Violet Line">
+<option>Rajiv Chowk</option>
+<option>New Delhi</option>
+<option>Chandni Chowk</option>
+<option>Chawri Bazar</option>
+<option>Kashmere Gate</option>
+<option>Central Secretariat</option>
+<option>Patel Chowk</option>
+<option>Udyog Bhawan</option>
+<option>AIIMS</option>
+<option>Hauz Khas</option>
 </datalist>
-
-<button class="primary" onclick="planJourney()">Find my route →</button>
-<div class="suggestions">
-<button onclick="quick('Rajiv Chowk')">Rajiv Chowk</button>
-<button onclick="quick('Kashmere Gate')">Kashmere Gate</button>
-<button onclick="quick('New Delhi')">New Delhi</button>
-</div>
-</div>
-
+<button class="primary" onclick="calculateRoute()">Calculate route →</button>
 <div id="result"></div>
-
-<section class="panel">
-<h2>Popular stations</h2>
-<div class="station-list">
-<div class="station">🚇 <b>Rajiv Chowk</b><p class="muted">Delhi Metro</p></div>
-<div class="station">🚇 <b>Kashmere Gate</b><p class="muted">Delhi Metro</p></div>
-<div class="station">🚉 <b>New Delhi</b><p class="muted">Metro and Railway</p></div>
 </div>
-</section>
 
-<div class="map">🗺️ Map preview — live map coming soon</div>
+<p class="muted">Prototype notice: This is an illustrative sample network, not an official or complete Delhi Metro route planner. Confirm actual routes with DMRC before travelling.</p>
 </main>
-<footer>MetroMind © 2026 · Travel smarter, arrive with confidence.</footer>
+<footer>MetroMind © 2026</footer>
 
 <script>
-function quick(name){
- document.getElementById("to").value=name;
- document.getElementById("to").focus();
-}
-function planJourney(){
- const from=document.getElementById("from").value.trim();
- const to=document.getElementById("to").value.trim();
+const network={
+"Rajiv Chowk":["New Delhi","Patel Chowk"],
+"New Delhi":["Rajiv Chowk","Chandni Chowk"],
+"Chandni Chowk":["New Delhi","Chawri Bazar"],
+"Chawri Bazar":["Chandni Chowk","Kashmere Gate"],
+"Kashmere Gate":["Chawri Bazar"],
+"Patel Chowk":["Rajiv Chowk","Central Secretariat"],
+"Central Secretariat":["Patel Chowk","Udyog Bhawan","AIIMS"],
+"Udyog Bhawan":["Central Secretariat"],
+"AIIMS":["Central Secretariat","Hauz Khas"],
+"Hauz Khas":["AIIMS"]
+};
+
+function calculateRoute(){
+ const start=document.getElementById("from").value.trim();
+ const end=document.getElementById("to").value.trim();
  const result=document.getElementById("result");
- if(!from||!to){alert("Please enter both stations.");return;}
- if(from.toLowerCase()===to.toLowerCase()){alert("Choose two different stations.");return;}
  result.style.display="block";
- result.innerHTML="<h2>Journey selected</h2><p><b>From:</b> "+safe(from)+"</p><p><b>To:</b> "+safe(to)+"</p><p>Station selection is working. Verified route, interchange and travel-time data are not connected yet.</p>";
- result.scrollIntoView({behavior:"smooth"});
+
+ if(!network[start]||!network[end]){
+ result.textContent="Please select stations from the available demo station list.";
+ return;
+ }
+ if(start===end){
+ result.textContent="Please select two different stations.";
+ return;
+ }
+
+ const queue=[[start]],visited=new Set([start]);
+ let route=null;
+
+ while(queue.length){
+ const path=queue.shift();
+ const current=path[path.length-1];
+ if(current===end){route=path;break;}
+ for(const next of network[current]){
+ if(!visited.has(next)){
+ visited.add(next);
+ queue.push([...path,next]);
+ }
+ }
+ }
+
+ if(!route){
+ result.textContent="No connected route found in this sample network.";
+ return;
+ }
+
+ result.innerHTML="<h2>Route found!</h2><p><b>From:</b> "+escapeText(start)+"</p><p><b>To:</b> "+escapeText(end)+"</p><p><b>Stops:</b> "+(route.length-1)+"</p><h3>Journey sequence</h3>"+route.map((s,i)=>"<div class='stop'>"+(i+1)+". "+escapeText(s)+"</div>").join("")+"<p><b>Note:</b> Sample route only. No official line, interchange or timing verification.</p>";
 }
-function safe(s){
+function escapeText(s){
  return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 </script>
