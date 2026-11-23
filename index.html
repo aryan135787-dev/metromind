@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071426">
+<title>MetroMind</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#071426;color:#fff;
+ font-family:Arial,sans-serif;
+}
+header{
+ padding:22px 20px;display:flex;
+ align-items:center;justify-content:space-between;
+}
+.logo{font-size:25px;font-weight:800}
+.logo span{color:#168cff}
+.profile{
+ background:#172b45;border:0;color:white;
+ padding:11px 15px;border-radius:14px;
+}
+main{padding:12px 18px;max-width:650px;margin:auto}
+h1{font-size:29px;margin:16px 0 8px}
+.sub{color:#9db0c9;font-size:14px}
+.search{
+ margin:25px 0 16px;background:#172b45;
+ padding:16px;border:1px solid #294563;
+ border-radius:16px;display:flex;gap:12px;
+}
+.search input{
+ background:transparent;border:0;outline:none;
+ color:white;width:100%;font-size:16px;
+}
+button{cursor:pointer;font-size:15px}
+.search button{
+ background:#168cff;border:0;color:white;
+ border-radius:10px;padding:10px 15px;
+}
+.map{
+ height:255px;border-radius:20px;
+ background:#10253c;position:relative;
+ overflow:hidden;border:1px solid #294563;
+}
+.grid{
+ position:absolute;inset:0;opacity:.35;
+ background-image:
+ linear-gradient(#36516c 1px,transparent 1px),
+ linear-gradient(90deg,#36516c 1px,transparent 1px);
+ background-size:35px 35px;
+}
+.route{
+ position:absolute;width:240px;height:125px;
+ border:5px solid #168cff;border-right:0;
+ border-bottom:0;border-radius:80% 0 0 0;
+ transform:rotate(15deg);left:65px;top:85px;
+}
+.station{
+ position:absolute;background:#168cff;
+ width:15px;height:15px;border:3px solid white;
+ border-radius:50%;
+}
+.s1{left:65px;top:170px}
+.s2{left:170px;top:110px}
+.maplabel{
+ position:absolute;bottom:15px;left:15px;
+ background:#071426;padding:10px 13px;
+ border-radius:10px;font-size:13px;
+}
+.section{margin-top:25px;font-size:19px}
+.nearby{
+ display:flex;align-items:center;gap:13px;
+ padding:16px;background:#12263d;
+ border-radius:14px;margin-top:12px;
+}
+.pin{font-size:24px}
+.nearby small{color:#9db0c9}
+.empty{
+ text-align:center;padding:20px;
+ color:#9db0c9;font-size:13px;
+}
+.footer{
+ display:flex;justify-content:space-around;
+ padding:20px 8px;margin-top:25px;
+ border-top:1px solid #294563;
+ color:#9db0c9;font-size:13px;
+}
+#message{color:#52dba0;margin-top:15px}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">M<span>etro</span>Mind</div>
+ <button class="profile" onclick="alert('Account options coming soon!')">Profile</button>
+</header>
+
+<main>
+ <p class="sub">YOUR JOURNEY. YOUR TIME.</p>
+ <h1>Where do you want to go?</h1>
+ <p class="sub">Find your destination and travel stress-free.</p>
+
+ <div class="search">
+  <input id="destination" placeholder="Search a station or stop">
+  <button onclick="searchStation()">Search</button>
+ </div>
+
+ <div class="map">
+  <div class="grid"></div>
+  <div class="route"></div>
+  <div class="station s1"></div>
+  <div class="station s2"></div>
+  <div class="maplabel">🌍 Explore transport near you</div>
+ </div>
+
+ <div class="section">Nearby transport</div>
+ <div class="nearby">
+  <div class="pin">🚇</div>
+  <div>
+   <strong>Find nearby stations</strong><br>
+   <small>Location permission required</small>
+  </div>
+ </div>
+
+ <div class="section">Recent destinations</div>
+ <div class="empty">Sign in to save and view your journey history.</div>
+
+ <div id="message"></div>
+</main>
+
+<div class="footer">
+ <span>⌂ Home</span>
+ <span>▤ Journeys</span>
+ <span>♡ Saved</span>
+ <span>⚙ Settings</span>
+</div>
+
+<script>
+function searchStation(){
+ const value=document.getElementById('destination').value.trim();
+ const message=document.getElementById('message');
+ if(!value){
+  message.textContent='Please enter a destination.';
+  return;
+ }
+ message.textContent='Destination selected: '+value+
+ '. Transport search integration is coming soon!';
+}
+</script>
+</body>
+</html>
