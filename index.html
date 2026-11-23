@@ -3,123 +3,108 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f5f8ff">
-<title>MetroMind - Your Journey, Made Easier</title>
+<title>MetroMind</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f5f8ff;color:#14243d;font-family:Arial,sans-serif}
-header{display:flex;align-items:center;justify-content:space-between;padding:20px 6%;background:white}
-.brand{display:flex;align-items:center;gap:10px;font-size:23px;font-weight:800}
-.logo{background:#1769e8;color:white;border-radius:12px;padding:10px}
-.profile{border:0;background:#eef4ff;color:#1769e8;border-radius:50%;width:42px;height:42px;font-size:20px}
-main{max-width:1050px;margin:auto;padding:35px 6%}
-h1{font-size:34px;margin:8px 0}
-.sub{color:#718096;margin-bottom:28px}
-.searchbox{background:white;border:1px solid #e0e7f1;border-radius:18px;padding:12px;box-shadow:0 8px 25px #16365b0c}
-.searchbox input{width:100%;border:0;outline:0;font-size:16px;padding:13px;color:#14243d}
-.searchbtn,.primary{background:#1769e8;color:white;border:0;padding:14px 20px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer}
-.searchbtn{width:100%;margin-top:8px}
-.section{margin-top:30px}
-.sectionhead{display:flex;justify-content:space-between;align-items:center}
-h2{font-size:20px}
-.link{color:#1769e8;font-weight:700;cursor:pointer}
-.map{height:260px;background:#e8f1fc;border-radius:20px;position:relative;overflow:hidden;margin-top:14px}
-.road{position:absolute;background:white;border:2px solid #d5e2f2;border-radius:40px}
-.r1{width:130%;height:34px;top:42%;left:-10%;transform:rotate(-15deg)}
-.r2{width:30px;height:130%;top:-15%;left:55%;transform:rotate(25deg)}
-.r3{width:100%;height:25px;top:75%;left:10%;transform:rotate(12deg)}
-.route{position:absolute;width:75%;height:5px;background:#1769e8;top:52%;left:12%;transform:rotate(-14deg);border-radius:10px}
-.pin{position:absolute;background:#1769e8;color:white;border:4px solid white;border-radius:50%;width:23px;height:23px;box-shadow:0 2px 8px #789}
-.p1{top:49%;left:12%}.p2{top:31%;left:83%}
-.maplabel{position:absolute;bottom:14px;left:14px;background:white;padding:9px 13px;border-radius:10px;font-size:12px;color:#52647b}
-.stations{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:14px}
-.station{background:white;border:1px solid #e5ebf4;padding:17px;border-radius:15px}
-.station b{display:block;margin-bottom:6px}
-.station small{color:#718096}
-.result{margin-top:14px;background:white;border:1px solid #e1e8f2;padding:17px;border-radius:15px;display:none}
-.journey{margin-top:18px;background:#eaf2ff;border-radius:18px;padding:20px;display:none}
-.journey h3{margin-top:0}
+header{padding:18px 6%;background:white;display:flex;justify-content:space-between;align-items:center}
+.brand{font-size:23px;font-weight:800}
+.logo{background:#1769e8;color:white;padding:9px 12px;border-radius:11px;margin-right:8px}
+main{max-width:900px;margin:auto;padding:30px 6%}
+h1{font-size:32px;margin-bottom:8px}
+.muted{color:#718096}
+.panel{background:white;border:1px solid #e0e7f1;border-radius:18px;padding:18px;margin-top:22px}
+label{display:block;font-weight:700;margin:12px 0 7px}
+input{width:100%;padding:14px;border:1px solid #dce4ef;border-radius:11px;font-size:16px}
+button{border:0;border-radius:11px;padding:14px;background:#1769e8;color:white;font-size:16px;font-weight:700;cursor:pointer}
+.primary{width:100%;margin-top:18px}
+.suggestions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.suggestions button{background:#edf4ff;color:#1769e8;padding:9px 12px;font-size:13px}
+#result{display:none;margin-top:18px;background:#eaf2ff;border-radius:15px;padding:18px}
+.station-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:14px}
+.station{background:white;border:1px solid #e3eaf3;border-radius:13px;padding:14px}
+.map{height:180px;background:#e5effb;border-radius:16px;margin-top:15px;display:flex;align-items:center;justify-content:center;color:#1769e8;font-weight:700}
 footer{text-align:center;color:#8491a4;padding:30px;font-size:13px}
-@media(max-width:600px){main{padding:25px 5%}h1{font-size:28px}.map{height:220px}}
 </style>
 </head>
 <body>
 <header>
- <div class="brand"><span class="logo">M</span> MetroMind</div>
- <button class="profile" onclick="alert('Account options coming soon!')" aria-label="Profile">👤</button>
+<div class="brand"><span class="logo">M</span>MetroMind</div>
+<span>🚇</span>
 </header>
-
 <main>
- <p style="color:#1769e8;font-weight:700">YOUR JOURNEY. YOUR TIME. YOUR PEACE OF MIND.</p>
- <h1>Where are you going?</h1>
- <p class="sub">Find your destination and travel with confidence.</p>
+<p style="color:#1769e8;font-weight:bold">YOUR JOURNEY. YOUR TIME. YOUR PEACE OF MIND.</p>
+<h1>Plan your journey</h1>
+<p class="muted">Find your Delhi Metro stations and plan your trip.</p>
 
- <div class="searchbox">
-  <input id="destination" type="text" placeholder="Search destination or station..." list="places">
-  <datalist id="places">
-   <option value="Rajiv Chowk">
-   <option value="New Delhi">
-   <option value="Kashmere Gate">
-   <option value="Dwarka">
-   <option value="Central Secretariat">
-  </datalist>
-  <button class="searchbtn" onclick="findRoute()">Find my route →</button>
- </div>
+<div class="panel">
+<label for="from">Starting station</label>
+<input id="from" list="stations" placeholder="Enter starting station">
+<label for="to">Destination station</label>
+<input id="to" list="stations" placeholder="Enter destination station">
 
- <div class="result" id="result"></div>
+<datalist id="stations">
+<option value="Rajiv Chowk">
+<option value="Kashmere Gate">
+<option value="New Delhi">
+<option value="Chandni Chowk">
+<option value="Central Secretariat">
+<option value="Dwarka">
+<option value="Dwarka Sector 21">
+<option value="Hauz Khas">
+<option value="Botanical Garden">
+<option value="Noida Sector 18">
+<option value="Lajpat Nagar">
+<option value="AIIMS">
+<option value="Karol Bagh">
+<option value="Mandi House">
+<option value="Yamuna Bank">
+<option value="Janakpuri West">
+<option value="Kalkaji Mandir">
+<option value="Violet Line">
+</datalist>
 
- <div class="section">
-  <div class="sectionhead">
-   <h2>Explore the map</h2>
-   <span class="link" onclick="alert('Full interactive map coming soon!')">Explore</span>
-  </div>
-  <div class="map">
-   <div class="road r1"></div><div class="road r2"></div><div class="road r3"></div>
-   <div class="route"></div>
-   <div class="pin p1"></div><div class="pin p2"></div>
-   <div class="maplabel">Map preview · Sample illustration</div>
-  </div>
- </div>
+<button class="primary" onclick="planJourney()">Find my route →</button>
+<div class="suggestions">
+<button onclick="quick('Rajiv Chowk')">Rajiv Chowk</button>
+<button onclick="quick('Kashmere Gate')">Kashmere Gate</button>
+<button onclick="quick('New Delhi')">New Delhi</button>
+</div>
+</div>
 
- <div class="section">
-  <h2>Popular stations</h2>
-  <div class="stations">
-   <div class="station"><b>🚇 Rajiv Chowk</b><small>New Delhi · Metro</small></div>
-   <div class="station"><b>🚇 Kashmere Gate</b><small>New Delhi · Metro</small></div>
-   <div class="station"><b>🚉 New Delhi</b><small>New Delhi · Railway</small></div>
-  </div>
- </div>
+<div id="result"></div>
 
- <div class="journey" id="journey">
-  <h3>Journey started!</h3>
-  <p id="journeytext"></p>
-  <p>Demo journey only — GPS and real station tracking are not connected yet.</p>
-  <button class="primary" onclick="endJourney()">End demo journey</button>
- </div>
+<section class="panel">
+<h2>Popular stations</h2>
+<div class="station-list">
+<div class="station">🚇 <b>Rajiv Chowk</b><p class="muted">Delhi Metro</p></div>
+<div class="station">🚇 <b>Kashmere Gate</b><p class="muted">Delhi Metro</p></div>
+<div class="station">🚉 <b>New Delhi</b><p class="muted">Metro and Railway</p></div>
+</div>
+</section>
+
+<div class="map">🗺️ Map preview — live map coming soon</div>
 </main>
-
 <footer>MetroMind © 2026 · Travel smarter, arrive with confidence.</footer>
 
 <script>
-let selectedDestination="";
-function findRoute(){
- const value=document.getElementById("destination").value.trim();
+function quick(name){
+ document.getElementById("to").value=name;
+ document.getElementById("to").focus();
+}
+function planJourney(){
+ const from=document.getElementById("from").value.trim();
+ const to=document.getElementById("to").value.trim();
  const result=document.getElementById("result");
- if(!value){alert("Please enter a destination.");return;}
- selectedDestination=value;
+ if(!from||!to){alert("Please enter both stations.");return;}
+ if(from.toLowerCase()===to.toLowerCase()){alert("Choose two different stations.");return;}
  result.style.display="block";
- result.innerHTML="<b>Destination selected: "+escapeHTML(value)+"</b><p>Route planning will be connected to verified transport data in a future version.</p><button class='primary' onclick='startJourney()'>Start demo journey</button>";
+ result.innerHTML="<h2>Journey selected</h2><p><b>From:</b> "+safe(from)+"</p><p><b>To:</b> "+safe(to)+"</p><p>Station selection is working. Verified route, interchange and travel-time data are not connected yet.</p>";
+ result.scrollIntoView({behavior:"smooth"});
 }
-function startJourney(){
- document.getElementById("journey").style.display="block";
- document.getElementById("journeytext").textContent="Your selected destination is "+selectedDestination+".";
- document.getElementById("journey").scrollIntoView({behavior:"smooth"});
-}
-function endJourney(){
- document.getElementById("journey").style.display="none";
-}
-function escapeHTML(s){
+function safe(s){
  return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 </script>
